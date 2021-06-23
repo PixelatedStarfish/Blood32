@@ -1,0 +1,15 @@
+
+< H is 1001000 (the ASCII value, 72, in binary) >
+
+
+[0,0]
+
+<set tape to an H>
+T: 0001001
+
+
+
+{
+C()
+
+}

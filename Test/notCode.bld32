@@ -1,0 +1,43 @@
+Hi, thanks for taking the time to read this.
+
+This is Andrew Vella, in 2021. Some of the keys are out and I have been getting nosebleeds.
+My second cauterization is Monday. I type 'z' by  copying and pasting or searching for the rest of the alphabet.
+
+So, why say all this, why create a programming language?
+Well, why make a wreck out of your hand? Why turn yourself into a pickle? I am on the tail end of a bachelor's degree in Computer Science and I wrote a programming language because I can.
+
+You can think of this language as a brainfudge and befunge icecream with some python and java sprinked in. I thought a language like Blood 32 would be great for learning about turing machines and how computers run programs at a low level  
+(without having to deal with the peculiarities of trying to run an assembler in a virtual machine that does not cooperate).
+
+I named it BLOOD32 because I literally put my blood into it, which is not something I recommend you do.
+The acronym (Boolean Language Of Orthogonalized Data) came second, after a good walk, in part, to lend credibility to a name people might find uncomfortable. Faced with the question "Why is it called Blood? What?" I could just explain the acronym instead of talking about my nosebleeds. I also wrote the acronym becuase it describes the language, and acronyms for programming language are something of a trend.
+
+So I woke up one day, in need of new sheets and pillow cases, and I decided to watch whatever Youtube had for me until I felt a little better. I had watched the Turttle1 video on a language difficult to refer to politely, so I watched several more of them. Someone left a comment to the effect of "A lot of these languages are essentially turing machines with some level of abstraction."
+
+So I had an unoriginal thought. No doubt, someone in 100 year history of computer science has thought of this befunge:
+
+What about a language that was explicitly designed to simulate a Turing machine? What is the shortest syntax that allows for that?
+
+Managing memory on one tape is pretty unweildy. That's fun and all, but if you want to prove your interpreter actually works, it helps to make your first programming language a bit easier to write in.
+
+Mutiple tapes seems like a good start to arrange information (say, one tape for decimal numbers, and one for ascii characters) but this has its own problems. If the tapes have unbounded memeory, management is actually harder because you have compounded the issue you wanted to solve. Mmeory can still climb up into infinity and become difficult to manage. So, the tapes have finite memory. This makes an n by m grid. Pair the grid with an unbounded tape and you can have your Turing complete cake and eat it too. Inputs on the grid, outputs on the tape.
+
+If you find this language too easy or whatever, you can limit yourself to a 0 by 0 grid, a blank tape, and these operations:
+
+O()
+C()
+L(l)
+T(i)
+W(v)
+Z(l)
+
+
+This should be turing complete. Have fun. You can remember it because sandwiches are yummy.
+Let's call this Tobysil, Tape Oriented BYte SIze Language. 
+
+This is wishful thinking, but if Truttle1 finds this language (they probably will not) I challenge them to write a program in this more limited scheme, complete with dinosaurs that work in an office. They have a thing for dinosaurs.
+
+
+Best,
+Andrew Vella
+

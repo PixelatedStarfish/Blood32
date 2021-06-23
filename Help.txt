@@ -1,0 +1,450 @@
+BLOOD_32
+Boolean Language Of Orthogonalized Data (with 32 bit integers)
+A Programming Language By Andrew Vella
+
+-Contents-
+Design Goals
+Basic Elements
+The Pointer
+Source Syntax
+Exceptions
+Grammar in EBNF
+Interpreter
+Pointer Behaviors
+Hello World
+Truth Machine
+Quine
+Alternative Keys
+
+*End of Contents
+
+-Design Goals-
+Something Turing complete, capable, and original. Context-free grammar. A interpreter, compiler, or source to source translator should be of a scope reasonable for one person.
+
+Simulates Turing Machines and related items with fewer statements than most other 
+languages.
+
+A dynamic, low level language without many common constructs of imperative languages. Orthogonal, Readable, and Writable.
+
+While challenging to program in, the language is not designed strictly for tedium sake.
+Rather, the language is a toy to play with. It is a sand box for learning about abstract computation through tinkering.
+
+This is language is not designed to introduce anyone to fundamental programming concepts like loops, methods, objects, and variables. It is a language for someone comfortable programming in imperative languages, who would like to challenge themselves with something different. 
+
+*End of Design Goals
+
+
+-Basic Elements-
+There is a global grid of arbitrary size in two dimensions.
+Cells on grid are 1, 0, or B (null, blank).
+
+There is an output array of cells not on the grid, an output tape.
+Tape data is output to console when called to do so.
+
+Cells are indicated via tuples: 
+(0, 0) is top left corner
+(0, 1) is one cell right 
+(1, 0) is one cell down
+
+A pointer can move on the grid, on the tape, or between the grid and tape.
+The pointer can read cells and write to them. Data on the tape can be output to a console.
+
+*End of Basic Elements
+
+
+-The Pointer-
+
+The state of the pointer consists of a tuple of integers for cell location, and an integer for a tape location. 
+
+Cell: (x, y)
+Tape: (i)
+
+Pointer ops: 
+
+D() writes a one or zero to the current cell randomly 
+E() End program. 
+A() ask for a boolean input from user and write it to current cell 
+
+
+C() output tape to console as an ASCII character 
+N() output tape to console as a decimal value 
+B() output tape as a binary value 
+H() output tape as a hex value 
+O() output tape as is 
+
+R(i) read value of current cell and write to location i on tape
+G(l) go to label l in source. If there is no label go to line l in source. 
+T(i) jump to location i on the tape
+W(v) write val v to current cell
+
+J(x, y) jump to cell (x, y) on grid, enables branching
+Y(l) Branch: Go to line l if the value of current cell is not zero
+Z(l) Branch: Go to line l if the value of current cell is zero
+L(l) A label: identified by integer l. If there is no label l, go to first op. 
+
+X() reset tape 
+S() Show grid
+
+
+*End of Pointer
+
+-Source Syntax-
+
+Initialize a tape
+
+T: 1010 
+Start with leftmost value at cell 0 All unspecified values are B
+
+T:
+For a tape of all blanks
+
+
+Initialize a grid 
+
+[x, y] indicate grid size
+(x, y, v) specify cell location and value. All unspecified cells are blank
+
+
+Pointers use chars { } ( ) , and alphanumeric characters
+{ } start and end pointer description
+
+To program a pointer type operations separated by a newline.
+Operations cannot be composed or nested.
+
+<This is a comment>
+
+<
+this is a multiple line comment
+>
+
+Source file extension .bld32
+
+
+*End of Source Syntax 
+
+-Exceptions-
+
+Error: An error not described below
+
+SyntaxError: error in source code syntax such as an undefined operation, missing token, unmatched char, or unexpected EOF.
+
+RuntimeError: a runtime error such as the ones below
+
+NotACellError: cell location not defined
+
+OperationUndefinedError: An operation is source is not defined
+
+ParamError: Illegal param for operation
+
+
+Here is an example:
+
+Op 3
+NotACellError: Cell location not defined
+Error Code: 4
+
+The error occurs at or before pointer operation 3 (counting from 0).
+The error is described and given an error code.
+
+*End of Exceptions
+
+
+-Grammar in EBNF-
+
+EBNF 
+https://www.ics.uci.edu/~pattis/misc/ebnf2.pdf
+
+Literal characters are distinguished with single quotes such as '|' or '{' compared to | or { 
+
+I cannot type boxes, so this will have to do.
+
+
+program ::= grid, tape, pointer
+grid := '[' Nz, Nz ']' {cellSet, newLine}
+tape := "T:" {bool}, newLine
+pointer := '{' {Op, newLine} '}'
+Op := Lett '(' [Nz | Nz , Nz] ')'
+cellSet := '(' Nz, Nz, Nz ')'
+
+Nz := a nonnegative integer
+newLine := ' \n '
+
+
+bool := '0' | '1' | 'B'
+Lett :=  'A' | 'B' | 'C' | 'D' | 'E' | 'F' |'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' | '@' | '#' | '$' | '%' | '&' | '^' | '*' | '?' | ':' | '~'
+
+*End of Grammar
+
+
+-Interpreter-
+
+Upon opening, the interpreter should print the following message:
+
+"Welcome to the Interpreter for BLOOD_32. Type ':help:' for documentation. Enter a .bld32 file to run it here."
+
+Search for the string ":help:" if that is found, run a program that prints this document and stop.
+
+Load source file contents into the interpreter as a string. Delete all comments from that string.
+Do a parse to test for syntactic accuracy. Throw an exception if there is an error and stop. 
+
+There are two instruction pointers: G and P. Pointers run a fetch execute cycle.
+
+Fetch
+Decode
+Execute
+Increment
+
+Before running G and P
+Grid size and tape are initialized with simple char by char lexical analyzer.
+
+Look for [
+Ignore , and parse ints into the dimensions for a 2D array GRID
+
+] indicates it is time to start parsing for tape
+
+The tape is an arrayList Tt (dynamically sized, heap allocated, not contiguous)
+
+
+Look for T:
+
+Read char c into cell c of Tt, the counter c ignores whitespace.
+
+Tt defaults to a size 64 arrayList full of blanks. If a tape cell exceeds that size at any point in the program, just add blanks until the right size is reached.
+
+Load grid and tape instructions into an array A. Remove whitespace for each element of A.
+This array only loads initializers for cells.
+G runs the fetch execute cycle for initializing the grid.
+
+Fetch: get string at index I.
+
+Decode: start at ( parse ints into a tuple of length 3, called t. End at ) 
+
+Execute: GRID cell is indicated by (t[0], t[1]), set the value of the cell is t[2] 
+
+Increment: increment pointer G
+
+
+load pointer operations (in { }) into an array L, run pointer operations with an instruction pointer. 
+
+
+Fetch: get instruction from L at the right index
+
+Decode: get the Lett of the operation (capital letter). Parse any integers into an array
+	Use the Lett to determine what the integers encode 
+
+Execute: Execute according to the operation as indicated by the Lett, with the integers as 	 input if there are any.
+
+Increment: Increment pointer P
+
+Program ends when pointer finishes last instruction
+
+*End of Interpreter
+
+-Pointer Behaviors-
+There are many behaviors a pointer can have; so it is good to have a way to name them.
+
+EGG
+a pointer acting on the X axis or on a line parallel to it 
+
+SEED
+a pointer acting on the Y axis or on a line parallel to it 
+
+SPORE
+a pointer on the tape
+
+TURING MACHINE
+a pointer that runs a Turing machine on an axis or on a line parallel to an axis 
+
+TURING EGG
+a Turing machine on the X axis
+
+TURING SEED
+a Turing machine on the Y axis
+
+TURING SPORE
+a pointer that runs a Turing machine on the tape
+
+SCRIBE
+a pointer that writes to the tape and prints to console
+
+ERASER
+writes blank to any cell it finds
+
+HONEST 
+writes one to any cell it finds
+
+DISHONEST 
+writes zero to any cell it finds
+
+INVERTER
+inverts the truth value of any non blank cell
+
+SWITCH
+Periodically inverts a cell
+
+PATROL 
+an eraser that moves along an axis
+
+AUTO
+a pointer that runs a cellular automaton. There can be many more kinds than listed here.
+
+LIFE
+runs the game of life
+
+ANT
+runs Langton's Ant
+
+RULE 110
+runs rule 110
+
+BISHOP
+moves only diagonally
+
+TRUTTLE
+A pointer that executes a G(l) operation for a line l in the source code. 
+
+ARTIST
+draws lines or shapes on the grid
+
+RECTANGLE
+draws a rectangle
+
+SQAURE
+draws a square
+
+ELLIPSE
+draws an ellipse
+
+CIRCLE
+draws an circle
+
+TRIANGLE
+draws a triangle
+
+ARC
+draws an arc
+
+RASCAL
+erratically changes cells on the tape
+
+DEMON
+an eraser that jumps around erratically
+
+BOUNCE 
+bounces around in parabolic arcs, like a ball
+
+FLUID
+changes between the behaviors listed above. Various subtypes can be described: ARTIST FLUID, AUTO FLUID, TURING FLUID
+
+ANGEL
+a fluid that changes behaviors erratically. Subtypes include ARTIST ANGEL, AUTO ANGEL, TURING ANGEL
+
+*End of Behaviors
+
+-Hello World-
+
+<a grid of 0 cells>
+[0,0]
+
+<set tape to 'HELLO WORLD' with ASCII values in binary (reversed)>
+T: 00100010B00110010B01001010B11110010B11101010B000001B11110010B00110010B00110010B10100010B0001001
+
+
+<note that if the tape input is interrupted by a newline in this source, the newline should be ignored>
+
+{
+C()
+
+}
+
+Output:
+HELLO WORLD
+
+
+-Truth Machine-
+<This truth machine sets the leftmost cell randomly to 1 or 0. If 0, print a 0. If 1, print 1 endlessly>
+
+<a one cell grid>
+[1,1]
+
+<tape is empty>
+T:
+
+{
+
+<set leftmost cell to a random value 0 or 1>
+D()
+
+< start of a conditional statement >
+Z(0)
+Y(1)
+
+<do zero case>
+L(0)
+R(0)
+B()
+E()
+
+<do one case>
+L(1)
+R(0)
+B()
+<loop>
+G(1)
+
+
+}
+
+Output in zero case (the leftmost cell is a zero):
+0
+
+Output in one case (the leftmost cell is a one):
+11111111111111111111111111111111111111111111111111111111...
+
+
+*End of Truth Machine
+
+-Quine-
+
+T: B1011111B0101B100101B000101B1100001B0101B100101B000101B1111001B0101B1101111B0101B1011101B000011B001101B000011B1101101
+[0,0]
+{
+O()
+C()
+}
+
+Output:
+
+A quine outputs its own source code
+
+*End of Quine
+
+-Alternative Keys-
+
+F() writes a one or zero to the current cell randomly
+Q() End program.
+I() ask for a boolean input from user and write it to current cell
+
+
+@() output tape to console as an ASCII character
+M() output tape to console as a decimal value
+V() output tape as a binary value
+K() output tape as a hex value
+P() output tape as is
+
+#(i) read value of current cell and write to location i on tape
+$(l) go to label l in source. If there is no label go to line l in source.
+%(i) jump to location i on the tape
+&(v) write val v to current cell
+
+^(x, y) jump to cell (x, y) on grid, enables branching
+U(l) Branch: Go to line l if the value of current cell is not zero
+*(l) Branch: Go to line l if the value of current cell is zero
+?(l) A label: identified by integer l. If there is no label l, go to first op.
+
+:() reset the tape
+~() Show grid
+
+*End of Alternative Keys
+
+*End of Language Description
