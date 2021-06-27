@@ -76,8 +76,13 @@ public class Pointer {
 		//These symbols are hard to justify... do the improve readability or are they extra keystrokes?
 		s = s.replace(" ", "");
 		s = s.replace(",", " ");
+		
+		s = s.replace("T(+)", "T(-1)");
+		s = s.replace("T(-)", "T(-2)");
+		
 		s = s.replace("(", " ");
 		s = s.replace(")", " ");
+	
 		
 		return s;	
 	}
@@ -290,7 +295,27 @@ private void ZBranch(int l) {
  }
  
  private void Tape(int i) {
-	 tapeLoc = i;
+	 
+	 if (i > -1) {
+		 
+	 tapeLoc = i; 
+	 }
+	 
+	 if (i == -1) {
+		 tapeLoc++;
+	 }
+	 if (i== -2) {
+		 
+		 if (tapeLoc > 0) {
+			 tapeLoc--;
+		 }
+		 else {
+			 Error.NotACellError(pc);
+		 }
+	
+
+
+	 }
 	 
  }
  private void Goto(int id) {
