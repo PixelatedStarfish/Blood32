@@ -1,4 +1,4 @@
-\import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -79,6 +79,8 @@ public class Pointer {
 		
 		s = s.replace("T(+)", "T(-1)");
 		s = s.replace("T(-)", "T(-2)");
+		s = s.replace("%(+)", "T(-1)");
+		s = s.replace("%(-)", "T(-2)");
 		
 		s = s.replace("(", " ");
 		s = s.replace(")", " ");
