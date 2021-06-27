@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+\import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -97,8 +97,8 @@ public class Pointer {
 		String[] eles = s.split(" ");
 		
 		
-		String keys = "DEACNBHORGTWJYZLXS";
-		String alts = "FQI@MVKP#$%&^U*?:~";
+		String keys = "DEACNBHORGTWJYZLXS_";
+		String alts = "FQI@MVKP#$%&^U*?:~!";
 		
 		for (int i = 0; i < keys.length(); i++) {
 			char keyAt = keys.charAt(i);
@@ -222,12 +222,26 @@ public class Pointer {
  			showGrid();
  			return;
  		}
+        
+        case 18: {
+ 			Delay();
+ 			return;
+ 		}
      	
    	 default: {
    		 if (c[0] != -1 ) {
    		Error.OperationUndefinedError(Pointer.pc); 
    			 }
      }}}
+	
+private void Delay() {
+	try {
+		Thread.sleep(1000);
+	} catch (InterruptedException e) {
+	
+		Main.exit(0);
+	}
+}
  
 private void showGrid() {
 	int[][] g = data.Grid;
