@@ -77,7 +77,7 @@ G(l) go to label l in source. If there is no label go to line l in source.
 T(i) jump to location i on the tape, + and - for incrementing and decrementing
 W(v) write val v to current cell
 
-J(x, y) jump to cell (x, y) on grid, enables branching
+J(x, y) jump to cell (x, y) on grid, + and - for incrementing and decrementing
 Y(l) Branch: Go to line l if the value of current cell is not zero
 Z(l) Branch: Go to line l if the value of current cell is zero
 L(l) A label: identified by integer l. If there is no label l, go to first op. 
@@ -85,6 +85,7 @@ L(l) A label: identified by integer l. If there is no label l, go to first op.
 X() reset tape 
 S() Show grid
 _() Delay for one second
+_(s) Delay for s milliseconds
 
 
 *End of Pointer
@@ -439,7 +440,7 @@ $(l) go to label l in source. If there is no label go to line l in source.
 %(i) jump to location i on the tape
 &(v) write val v to current cell
 
-^(x, y) jump to cell (x, y) on grid, enables branching
+^(x, y) jump to cell (x, y) on grid, + and - for incrementing and decrementing
 U(l) Branch: Go to line l if the value of current cell is not zero
 *(l) Branch: Go to line l if the value of current cell is zero
 ?(l) A label: identified by integer l. If there is no label l, go to first op.
@@ -447,6 +448,7 @@ U(l) Branch: Go to line l if the value of current cell is not zero
 :() reset the tape
 ~() Show grid
 !() Delay for one second
+!(s) Delay for s milliseconds
 
 *End of Alternative Keys
 
