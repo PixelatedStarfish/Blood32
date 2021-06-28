@@ -82,8 +82,21 @@ public class Pointer {
 		s = s.replace("%(+)", "T(-1)");
 		s = s.replace("%(-)", "T(-2)");
 		
+		s = s.replace("J(+,+)", "J(-1,-1)");
+		s = s.replace("J(-,-)", "J(-2,-2)");
+		s = s.replace("J(+,-)", "J(-1,-2)");
+		s = s.replace("J(-,+)", "J(-2,-1)");
+		
+		s = s.replace("^(+,+)", "J(-1,-1)");
+		s = s.replace("^(-,-)", "J(-2,-2)");
+		s = s.replace("^(+,-)", "J(-1,-2)");
+		s = s.replace("^(-,+)", "J(-2,-1)");
+	
+		
 		s = s.replace("(", " ");
 		s = s.replace(")", " ");
+		
+	
 	
 		
 		return s;	
@@ -226,7 +239,8 @@ public class Pointer {
  		}
         
         case 18: {
- 			Delay();
+       
+     	    Delay(c[1]);
  			return;
  		}
      	
@@ -236,15 +250,25 @@ public class Pointer {
    			 }
      }}}
 	
-private void Delay() {
+private void Delay(int millis) {
+	//inelegant, but serviceable
 	try {
-		Thread.sleep(1000);
+		Thread.sleep(millis);
 	} catch (InterruptedException e) {
 	
 		Main.exit(0);
 	}
+	catch (IllegalArgumentException ae) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+
+			Main.exit(0);
+		}
+	}
 }
  
+
 private void showGrid() {
 	int[][] g = data.Grid;
 	System.out.println(g.length + " by " + g[0].length + " Grid:\n");
@@ -305,9 +329,38 @@ private void ZBranch(int l) {
 }
 
  private void Jump(int x, int y) {
+	 
+if ( x > -1 && y > -1) {
 	CellLoc[0] = x;
 	CellLoc[1] = y;
 	tapeLoc = -1;
+}
+else {
+
+if (tapeLoc != -1) {
+	Error.NotACellError(pc);
+}
+
+try {
+if (x == -1) {
+	CellLoc[0]++;
+}
+if (y == -1) {
+	CellLoc[1]++;
+}
+if (x == -2) {
+	CellLoc[0]--;
+	
+}
+if (y == -2) {
+	CellLoc[1]--;
+	
+}} catch (ArrayIndexOutOfBoundsException e) {
+	Error.NotACellError(pc);
+}
+
+
+}
  }
  
  private void Tape(int i) {
