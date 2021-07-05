@@ -14,7 +14,7 @@ private static String[] getItems(int c) throws FileNotFoundException {
 	String[] items = new String[c];
 	
 	String output = "";
-    File f = new File("src/Help.txt");
+    File f = new File("Help.txt");
     Scanner myReader = new Scanner(f);
     
     int i = 0;
@@ -37,7 +37,7 @@ private static String[] getItems(int c) throws FileNotFoundException {
 private static int getCount() throws FileNotFoundException {
 
 	
-	File f = new File("src/Help.txt");
+	File f = new File("Help.txt");
     Scanner myReader = new Scanner(f);
     
     int i = 0;
@@ -56,7 +56,7 @@ private static int getCount() throws FileNotFoundException {
 
 
 private static String[] getTitles(int c) throws FileNotFoundException {
-    File f = new File("src/Help.txt");
+    File f = new File("Help.txt");
     
     @SuppressWarnings("resource")
 	Scanner myReader = new Scanner(f);
