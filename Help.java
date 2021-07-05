@@ -14,7 +14,7 @@ private static String[] getItems(int c) throws FileNotFoundException {
 	String[] items = new String[c];
 	
 	String output = "";
-    File f = new File("Help.txt");
+    File f = new File("src/Help.txt");
     Scanner myReader = new Scanner(f);
     
     int i = 0;
@@ -37,7 +37,7 @@ private static String[] getItems(int c) throws FileNotFoundException {
 private static int getCount() throws FileNotFoundException {
 
 	
-	File f = new File("Help.txt");
+	File f = new File("src/Help.txt");
     Scanner myReader = new Scanner(f);
     
     int i = 0;
@@ -56,7 +56,7 @@ private static int getCount() throws FileNotFoundException {
 
 
 private static String[] getTitles(int c) throws FileNotFoundException {
-    File f = new File("Help.txt");
+    File f = new File("src/Help.txt");
     
     @SuppressWarnings("resource")
 	Scanner myReader = new Scanner(f);
@@ -66,7 +66,7 @@ private static String[] getTitles(int c) throws FileNotFoundException {
 	  while (myReader.hasNextLine()) {
 	      String foo  = myReader.nextLine();
 	      
-	      if (foo.contains("-") && (!foo.contains("dec") && !foo.contains("Con")) && !foo.contains("(l)")) {
+	      if (foo.contains("-") && (!foo.contains("dec") && !foo.contains("Con")) && !foo.contains("(l)") && !foo.contains("Goblin") && !foo.contains("\'-\'")) {
 	    	  foo = foo.replace("-", "");
 	    	  titles[i] = foo.trim();
 	    	  i++;
@@ -127,6 +127,7 @@ public static void helpRead(Scanner Conway) throws FileNotFoundException {
 	  String s = getInput(Conway);
 		
 		if (s.contains("Exit")) {
+			Main.exit(0);
 			return;
 		}
 		boolean isACommand = false;
