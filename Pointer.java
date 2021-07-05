@@ -12,6 +12,7 @@ public class Pointer {
 	//Note that if tapeLoc is greater than -1 it takes precedence over CellLoc.
  	static int[] CellLoc = new int[2];
  	static int tapeLoc = -1;
+ 	static int lastGoto = pc;
  	
  	static Data data;
  	Scanner scan;
@@ -76,6 +77,10 @@ public class Pointer {
 		//These symbols are hard to justify... do the improve readability or are they extra keystrokes?
 		s = s.replace(" ", "");
 		s = s.replace(",", " ");
+		
+		s = s.replace("G()", "G(-180339)");
+		s = s.replace("$()", "G(-180339)");
+
 		
 		s = s.replace("T(+)", "T(-1)");
 		s = s.replace("T(-)", "T(-2)");
@@ -198,9 +203,13 @@ public class Pointer {
  		}
         
         case 9: {
- 			Goto(c[1]);
+        	if (c[1] != -180339) {
+ 			    Goto(c[1]);
  			return;
  		}
+        	Goto();
+        	return;
+        }
         
         case 10: {
  			Tape(c[1]);
@@ -218,12 +227,15 @@ public class Pointer {
  		}
         
         case 13: {
- 			YBranch(c[1]);
- 			return;
+        	YBranch(c[1]);
+        	return;
+        	
+        	
  		}
         case 14: {
- 			ZBranch(c[1]);
+        	ZBranch(c[1]);
  			return;
+        	
  		}
         
         case 15: {
@@ -311,6 +323,7 @@ private void Write(int i) {
 
 	
 private void YBranch(int l) {
+	lastGoto = pc + 1;
 	int r  = data.readGrid(CellLoc[0], CellLoc[1]);
 	
 	if (r != 0) {
@@ -319,7 +332,10 @@ private void YBranch(int l) {
 	
 }
 
+
+
 private void ZBranch(int l) {
+	lastGoto = pc + 1; 
 	int r  = data.readGrid(CellLoc[0], CellLoc[1]);
 	
 	if (r == 0) {
@@ -327,6 +343,10 @@ private void ZBranch(int l) {
 	}
 	
 }
+
+
+
+
 
  private void Jump(int x, int y) {
 	 
@@ -388,15 +408,20 @@ if (y == -2) {
 	 
  }
  private void Goto(int id) {
-	
+	 lastGoto = pc;
 	 
 	 for (int i = 0; i < Labels.size(); i++) {
-		//System.out.println("LABEL: " + Labels.get(i)[0]);
 		 if (Labels.get(i)[0] == id) {
 			 pc = Labels.get(i)[1];
 			 return;
 		 }}
 	 pc = 0;
+ }
+ 
+ private void Goto() {
+	// System.out.println(pc);
+	 pc = lastGoto;
+	 //System.out.println(lastGoto);
  }
  private void resetTape() {
 	 data.resetTape();
@@ -544,4 +569,3 @@ if (y == -2) {
 
 //COmpiler Language WIth No Pronounceable Acronym
 // INTERCAL => COLWINPA 
-
