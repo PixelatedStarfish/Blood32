@@ -54,10 +54,11 @@ The pointer can read cells and write to them. Data on the tape can be output to 
 
 -The Pointer-
 
-The state of the pointer consists of a tuple of integers for cell location, and an integer for a tape location. 
+The state of the pointer consists of a tuple of integers for cell location, an integer for a tape location, and an integer that stores data for the Goblins operation, explained at op G().
 
 Cell: (x, y)
 Tape: (i)
+Goblin: (g)
 
 Pointer ops: 
 
@@ -73,7 +74,7 @@ H() output tape as a hex value
 O() output tape as is 
 
 R(i) read value of current cell and write to location i on tape
-G(l) go to label l in source. If there is no label go to line l in source. 
+G(l) go to label l in source. If there is no label called l, go to start. 
 T(i) jump to location i on the tape, + and - for incrementing and decrementing
 W(v) write val v to current cell
 
@@ -81,12 +82,12 @@ J(x, y) jump to cell (x, y) on grid, + and - for incrementing and decrementing
 Y(l) Branch: Go to line l if the value of current cell is not zero
 Z(l) Branch: Go to line l if the value of current cell is zero
 L(l) A label: identified by integer l. If there is no label l, go to first op. 
+_(s) Delay for s milliseconds
 
 X() reset tape 
 S() Show grid
+G() Goblins op -- label -180339 -- goto last goto executed, execute from the next line
 _() Delay for one second
-_(s) Delay for s milliseconds
-
 
 *End of Pointer
 
@@ -436,7 +437,7 @@ K() output tape as a hex value
 P() output tape as is
 
 #(i) read value of current cell and write to location i on tape
-$(l) go to label l in source. If there is no label go to line l in source.
+$(l) go to label l in source. If there  is no label l, go to start
 %(i) jump to location i on the tape
 &(v) write val v to current cell
 
@@ -444,11 +445,14 @@ $(l) go to label l in source. If there is no label go to line l in source.
 U(l) Branch: Go to line l if the value of current cell is not zero
 *(l) Branch: Go to line l if the value of current cell is zero
 ?(l) A label: identified by integer l. If there is no label l, go to first op.
+!(s) Delay for s milliseconds
 
 :() reset the tape
 ~() Show grid
+$() Goblins op -- label -180339 -- goto last goto executed, execute from the next line
 !() Delay for one second
-!(s) Delay for s milliseconds
+
+
 
 *End of Alternative Keys
 
